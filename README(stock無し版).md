@@ -142,6 +142,12 @@
 |updated_date|更新日時|timestamps|not null|
 <br>
 
+### インデックス
+|名前|カラム名|参照テーブル|参照カラム|削除時|
+|-|-|-|-|-|
+|items_user_id_foreign |user_id|users|id|cascade|
+<br>
+
 ## stocksテーブル
 |カラム名|カラム名(日本語)|型|オプション|
 |-|-|-----|-------|
