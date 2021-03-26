@@ -16,5 +16,10 @@
       <a href="./cart.php" class="cart"></a>
     </div>
   </header>
+  <?php 
+  require_once "./dbc.php";
+  dbc();
+  ?>
+
 </body>
 </html>
