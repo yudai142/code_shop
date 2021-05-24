@@ -20,4 +20,19 @@ function dbc(){
     echo '<br>';
   }
 }
+
+// ファイルデータの取得
+// @return array $fileData
+
+function getAllFile(){
+  $sql = "SELECT * FROM items";
+  $fileData = dbc()->query($sql);
+  return $fileData;
+}
+
+// 悪質な入力があった際にエスケープ処理を行う
+function h($s) {
+  return htmlspecialchars($s, ENT_QUOTES, "UTF-8");
+}
+
 ?>
