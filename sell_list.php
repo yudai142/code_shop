@@ -3,11 +3,20 @@ require_once "./dbc.php";
 session_start();
 $items = getAllFile();
 
+// 商品の削除処理
 if ($_REQUEST["sql_kind"] === "delete" && is_numeric($_REQUEST['item_id']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
   $id = $_REQUEST['item_id'];
   $statement = dbc()->prepare('DELETE FROM items WHERE id=?');
   $statement->execute(array($id));
   $_SESSION['success_message'] = '商品を削除しました。';
+  header('Location: ./sell_list.php');
+}
+
+// 在庫数の更新処理
+if ($_REQUEST["sql_kind"] === "update" && is_numeric($_REQUEST['item_id']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+  $statement = dbc()->prepare('UPDATE items SET stock=? WHERE id=?');
+  $statement->execute(array($_POST['update_stock'], $_REQUEST['item_id']));
+  $_SESSION['success_message'] = '商品の在庫数を更新しました。';
   header('Location: ./sell_list.php');
 }
 
@@ -48,7 +57,7 @@ if ($_REQUEST["sql_kind"] === "delete" && is_numeric($_REQUEST['item_id']) && $_
           <td style="vertical-align:middle;"><?php echo "{$item['price']}" ?>円</td>
           <td style="vertical-align:middle;">
           <form action="" method="post">
-            <input type="text" style="width:60px;text-align:right;" value="<?php echo "{$item['stock']}" ?>">個&nbsp;&nbsp;<input type="submit" value="変更する">
+            <input type="text" style="width:60px;text-align:right;" name="update_stock" value="<?php echo "{$item['stock']}" ?>">個&nbsp;&nbsp;<input type="submit" value="変更する" class="btn btn-primary">
             <input type="hidden" name="item_id" value="<?php echo "{$item['id']}" ?>">
             <input type="hidden" name="sql_kind" value="update">
           </form>
