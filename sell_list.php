@@ -20,6 +20,20 @@ if ($_REQUEST["sql_kind"] === "update" && is_numeric($_REQUEST['item_id']) && $_
   header('Location: ./sell_list.php');
 }
 
+// 公開・非公開の切り替え処理
+if ($_REQUEST["sql_kind"] === "change" && is_numeric($_REQUEST['item_id']) && $_SERVER['REQUEST_METHOD'] === 'POST' && is_numeric($_REQUEST['change_status'])) {
+  if($_REQUEST['change_status'] == 1){
+    $statement = dbc()->prepare('UPDATE items SET status=? WHERE id=?');
+    $statement->execute(array(0, $_REQUEST['item_id']));
+    $_SESSION['success_message'] = '商品を非公開に設定しました。';
+    header('Location: ./sell_list.php');
+  }else{
+    $statement = dbc()->prepare('UPDATE items SET status=? WHERE id=?');
+    $statement->execute(array(1, $_REQUEST['item_id']));
+    $_SESSION['success_message'] = '商品を公開に設定しました。';
+    header('Location: ./sell_list.php');
+  }
+}
 
 ?>
 <!DOCTYPE html>
@@ -65,9 +79,9 @@ if ($_REQUEST["sql_kind"] === "update" && is_numeric($_REQUEST['item_id']) && $_
           <form method="post">
           <td style="vertical-align:middle;">
           <?php if($item['status'] == 1):?>
-          <input type="submit" value="非公開にする">
+          <input type="submit" class="btn btn-warning" value="非公開にする">
           <?php else: ?>
-          <input type="submit" value="公開する">
+          <input type="submit" class="btn btn-success" value="公開する">
           <?php endif ?>
           </td>
           <input type="hidden" name="change_status" value="<?php echo "{$item['status']}" ?>">
