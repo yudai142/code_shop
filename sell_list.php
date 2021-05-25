@@ -1,6 +1,17 @@
 <?php
 require_once "./dbc.php";
+session_start();
 $items = getAllFile();
+
+if ($_REQUEST["sql_kind"] === "delete" && is_numeric($_REQUEST['item_id']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+  $id = $_REQUEST['item_id'];
+  $statement = dbc()->prepare('DELETE FROM items WHERE id=?');
+  $statement->execute(array($id));
+  $_SESSION['success_message'] = '商品を削除しました。';
+  header('Location: ./sell_list.php');
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -26,13 +37,21 @@ $items = getAllFile();
         </tr>
       </thead>
       <tbody>
-        <?php foreach($items as $item): ?>
+      <?php if(!empty($_SESSION['success_message']) ): ?>
+      	<p class="success_message"><?php echo $_SESSION['success_message']; ?></p>
+      <?php unset($_SESSION['success_message']); ?>
+      <?php endif; ?>
+      <?php foreach($items as $item): ?>
         <tr style="vertical-align:middle;text-align:center;<?php if($item['status'] != 1){echo 'background-color: #A9A9A9;';}?>">
           <td><img src="<?php echo "{$item['image']}" ?>" alt="" style="height:125px;"></td>
           <td style="vertical-align:middle;"><?php echo "{$item['name']}" ?></td>
           <td style="vertical-align:middle;"><?php echo "{$item['price']}" ?>円</td>
           <td style="vertical-align:middle;">
-          <input type="text" style="width:60px;text-align:right;" value="<?php echo "{$item['stock']}" ?>">個&nbsp;&nbsp;<input type="submit" value="変更する">
+          <form action="" method="post">
+            <input type="text" style="width:60px;text-align:right;" value="<?php echo "{$item['stock']}" ?>">個&nbsp;&nbsp;<input type="submit" value="変更する">
+            <input type="hidden" name="item_id" value="<?php echo "{$item['id']}" ?>">
+            <input type="hidden" name="sql_kind" value="update">
+          </form>
           </td>
           <form method="post">
           <td style="vertical-align:middle;">
@@ -46,7 +65,13 @@ $items = getAllFile();
           <input type="hidden" name="item_id" value="<?php echo "{$item['id']}" ?>">
           <input type="hidden" name="sql_kind" value="change">
           </form>
-          <td style="vertical-align:middle;"><button class="btn btn-danger">削除する</button></td>
+          <td style="vertical-align:middle;">
+          <form action="" method="post">
+            <input type="submit" value="削除する" class="btn btn-danger">
+            <input type="hidden" name="item_id" value="<?php echo "{$item['id']}" ?>">
+            <input type="hidden" name="sql_kind" value="delete">
+          </form>
+          </td>
         </tr>
         <?php endforeach; ?>
       </tbody>
