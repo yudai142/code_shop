@@ -13,7 +13,7 @@ if ($_REQUEST["sql_kind"] === "delete" && is_numeric($_REQUEST['item_id']) && $_
 }
 
 // 在庫数の更新処理
-if ($_REQUEST["sql_kind"] === "update" && is_numeric($_REQUEST['item_id']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_REQUEST["sql_kind"] === "update" && is_numeric($_REQUEST['item_id']) && $_SERVER['REQUEST_METHOD'] === 'POST' && is_numeric($_POST['update_stock'])) {
   $statement = dbc()->prepare('UPDATE items SET stock=? WHERE id=?');
   $statement->execute(array($_POST['update_stock'], $_REQUEST['item_id']));
   $_SESSION['success_message'] = '商品の在庫数を更新しました。';
