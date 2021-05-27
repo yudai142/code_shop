@@ -66,7 +66,7 @@ if ($_REQUEST["sql_kind"] === "change" && is_numeric($_REQUEST['item_id']) && $_
       <?php endif; ?>
       <?php foreach($items as $item): ?>
         <tr style="vertical-align:middle;text-align:center;<?php if($item['status'] != 1){echo 'background-color: #A9A9A9;';}?>">
-          <td><img src="<?php echo "{$item['image']}" ?>" alt="" style="height:125px;"></td>
+          <td><img src="item_image/<?php echo "{$item['image']}" ?>" alt="" style="height:125px;"></td>
           <td style="vertical-align:middle;"><?php echo "{$item['name']}" ?></td>
           <td style="vertical-align:middle;"><?php echo "{$item['price']}" ?>円</td>
           <td style="vertical-align:middle;">
