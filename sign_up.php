@@ -1,3 +1,34 @@
+<?php
+
+require_once('dbc.php');
+
+
+if (!empty($_POST)) {
+
+  if ($_POST['name'] === '') {
+    $error['name'] = 'blank';
+  }
+  if (strlen($_POST['password']) < 6) {
+    $error['password'] = 'length';
+  }
+  if ($_POST['password'] === '') {
+    $error['password'] = 'blank';
+  }
+
+}
+
+if (!empty($_POST) && empty($error)) {
+	$statement = dbc()->prepare('INSERT INTO users SET user_name=?, password=?, created_date=NOW()');
+	$statement->execute(array(
+		$_POST['name'],
+		sha1($_POST['password'])
+	));
+  unset($_POST);
+	header('Location: login.php');
+	exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -10,23 +41,30 @@
 <body>
     <?php require_once "./read/header.php"; ?>
     <div class="container col-6">
-        <form>
+      <?php if (!empty($_POST) && empty($error)): ?>
+        <p><?php ver_dump($_POST); ?></p>
+      <?php endif; ?>
+      <h2>ユーザー登録</h2>
+        <form action="" method="post">
           <div class="form-group">
-            <label for="exampleInputEmail1">Email address</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+            <label for="exampleInputEmail1">ユーザー名</label>
+            <input type="text" name="name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            <?php if ($error['name'] === 'blank'): ?>
+            <p class="error">*ニックネームを入力してください</p>
+            <?php endif; ?>
           </div>
           <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1">
+            <label for="exampleInputPassword1">パスワード</label>
+            <input type="password" name="password" class="form-control" id="exampleInputPassword1">
+            <?php if ($error['password'] === 'blank'): ?>
+            <p class="error">*パスワードを入力してください</p>
+            <?php endif; ?>
+            <?php if ($error['password'] === 'length'): ?>
+            <p class="error">*パスワードは6文字以上で入力してください</p>
+            <?php endif; ?>
           </div>
-          <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-            <label class="form-check-label" for="exampleCheck1">Check me out</label>
-          </div>
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary">登録する</button>
         </form>
     </div>
-    
 </body>
 </html>
