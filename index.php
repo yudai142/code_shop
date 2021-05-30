@@ -1,6 +1,6 @@
 <?php 
 require_once "./dbc.php";
-$items = getAllFile();
+$items = getOpenItems();
 ?>
 
 <!DOCTYPE html>
