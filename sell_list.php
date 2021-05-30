@@ -48,7 +48,7 @@ if ($_REQUEST["sql_kind"] === "change" && is_numeric($_REQUEST['item_id']) && $_
 <body>
     <?php require_once "./read/header.php"; ?>
     <div class="container col-10">
-        <table class="table">
+      <table class="table">
       <thead>
         <tr style="vertical-align: middle;text-align: center;">
           <th scope="col">商品画像</th>
