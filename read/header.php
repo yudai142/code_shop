@@ -1,6 +1,5 @@
 <?php
 session_start();
-var_dump($_SESSION);
 ?>
 <header>
 <nav class="navbar navbar-light bg-primary mb-5 p-0">
@@ -18,6 +17,7 @@ var_dump($_SESSION);
         <?php if($_SESSION['name'] === "admin"):?>
           <a href="./user_list.php" class="btn btn-success">ユーザー管理ページ</a>
           <a href="./sell_list.php" class="btn btn-warning">商品管理ページ</a>
+        <a href="./new_item.php" class="btn btn-info">商品登録</a>
         <?php endif;?>
         <a href="./logout.php" type="button" class="btn btn-danger">ログアウト</a>
       <?php else: ?>
