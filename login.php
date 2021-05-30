@@ -14,6 +14,7 @@ if(!empty($_POST)) {
     $member = $login->fetch();
     if($member) {
       $_SESSION['id'] = $member['id'];
+      $_SESSION['name'] = $member['user_name'];
       $_SESSION['time'] = time();
       if($_POST['save'] === 'on') {
         setcookie('name', $_POST['name'], time()+60*60*24*14);
@@ -27,6 +28,7 @@ if(!empty($_POST)) {
     $error['login'] = 'blank';
   }
 }
+
 ?>
 
 <!DOCTYPE html>

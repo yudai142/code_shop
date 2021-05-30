@@ -14,14 +14,7 @@ $items = getAllFile();
   <title>Document</title>
 </head>
 <body>
-<header>
-  <div class="header-box">
-    <a href="./top.php">
-      <img class="logo" src="./images/logo.png" alt="CodeSHOP">
-    </a>
-    <a href="./cart.php" class="cart"></a>
-  </div>
-</header>
+<?php require_once "./read/header.php"; ?>
 <div class="container col-7 pt-5">
   <div class="row">
     <?php foreach($items as $item): ?>
