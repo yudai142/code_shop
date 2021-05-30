@@ -1,6 +1,12 @@
 <?php 
+session_start();
 require_once "./dbc.php";
+
 $items = getOpenItems();
+if(isset($_SESSION['message'])){
+  $message = $_SESSION['message'];
+  $_SESSION['message'] = NULL;
+}
 ?>
 
 <!DOCTYPE html>
@@ -16,6 +22,9 @@ $items = getOpenItems();
 <body>
 <?php require_once "./read/header.php"; ?>
 <div class="container col-7 pt-5">
+  <?php if(isset($message)):?>
+    <?php echo $message; ?>
+  <?php endif;?>
   <div class="row">
     <?php foreach($items as $item): ?>
     <div class="col-4">

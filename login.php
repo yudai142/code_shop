@@ -19,7 +19,8 @@ if(!empty($_POST)) {
       if($_POST['save'] === 'on') {
         setcookie('name', $_POST['name'], time()+60*60*24*14);
       }
-      header("Location: index.php");
+      $_SESSION['message'] = "ログインしました";
+      header("Location: ./index.php");
       exit;
     }else{
       $error['login'] = 'failed';
@@ -27,6 +28,11 @@ if(!empty($_POST)) {
   }else{
     $error['login'] = 'blank';
   }
+}
+
+if(isset($_SESSION['message'])){
+  $message = $_SESSION['message'];
+  $_SESSION['message'] = NULL;
 }
 
 ?>
@@ -43,6 +49,9 @@ if(!empty($_POST)) {
 <body>
     <?php require_once "./read/header.php"; ?>
     <div class="container col-6">
+      <?php if(isset($message)):?>
+        <?php echo $message; ?>
+      <?php endif;?>
       <h2>ユーザーログイン</h2>
       <form action="" method="post">
         <div class="form-group">
@@ -63,7 +72,7 @@ if(!empty($_POST)) {
           <input type="checkbox" class="form-check-input" id="exampleCheck1">
           <label class="form-check-label" for="exampleCheck1">Check me out</label>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">ログイン</button>
       </form>
     </div>
     

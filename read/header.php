@@ -1,6 +1,3 @@
-<?php
-session_start();
-?>
 <header>
 <nav class="navbar navbar-light bg-primary mb-5 p-0">
     <div class="container">

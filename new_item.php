@@ -1,6 +1,6 @@
 <?php
-require_once('dbc.php');
 session_start();
+require_once('dbc.php');
 
 if (!empty($_POST)) {
   if ($_POST['name'] === '') {
@@ -39,6 +39,7 @@ if (!empty($_POST)) {
       (int)$_POST['stock'],
       (int)$_SESSION['id']
     ));
+    $_SESSION['message'] = "商品を登録しました";
     header('Location: ./index.php');
     exit();
   }

@@ -2,7 +2,7 @@
   session_start();
   // セッションを消す
   $_SESSION = array();
-  session_destroy();
+  $_SESSION['message'] = "ログアウトしました";
 	header('Location: index.php');
 	exit();
 ?>

@@ -1,7 +1,6 @@
 <?php
-
+session_start();
 require_once('dbc.php');
-
 
 if (!empty($_POST)) {
 
@@ -24,6 +23,7 @@ if (!empty($_POST) && empty($error)) {
 		sha1($_POST['password'])
 	));
   unset($_POST);
+  $_SESSION['message'] = "ユーザーを作成しました";
 	header('Location: login.php');
 	exit();
 }
