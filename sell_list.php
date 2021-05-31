@@ -10,6 +10,7 @@ if ($_REQUEST["sql_kind"] === "delete" && is_numeric($_REQUEST['item_id']) && $_
   $statement->execute(array($id));
   $_SESSION['success_message'] = '商品を削除しました。';
   header('Location: ./sell_list.php');
+  exit();
 }
 
 // 在庫数の更新処理
@@ -18,6 +19,7 @@ if ($_REQUEST["sql_kind"] === "update" && is_numeric($_REQUEST['item_id']) && $_
   $statement->execute(array($_POST['update_stock'], $_REQUEST['item_id']));
   $_SESSION['success_message'] = '商品の在庫数を更新しました。';
   header('Location: ./sell_list.php');
+  exit();
 }
 
 // 公開・非公開の切り替え処理
@@ -27,13 +29,21 @@ if ($_REQUEST["sql_kind"] === "change" && is_numeric($_REQUEST['item_id']) && $_
     $statement->execute(array(0, $_REQUEST['item_id']));
     $_SESSION['success_message'] = '商品を非公開に設定しました。';
     header('Location: ./sell_list.php');
+    exit();
   }else{
     $statement = dbc()->prepare('UPDATE items SET status=? WHERE id=?');
     $statement->execute(array(1, $_REQUEST['item_id']));
     $_SESSION['success_message'] = '商品を公開に設定しました。';
     header('Location: ./sell_list.php');
+    exit();
   }
 }
+
+if(isset($_SESSION['success_message'])){
+  $success_message = $_SESSION['success_message'];
+  unset($_SESSION['success_message']);
+}
+
 
 ?>
 <!DOCTYPE html>
@@ -60,9 +70,8 @@ if ($_REQUEST["sql_kind"] === "change" && is_numeric($_REQUEST['item_id']) && $_
         </tr>
       </thead>
       <tbody>
-      <?php if(!empty($_SESSION['success_message']) ): ?>
-      	<p class="success_message"><?php echo $_SESSION['success_message']; ?></p>
-      <?php unset($_SESSION['success_message']); ?>
+      <?php if(!empty($success_message) ): ?>
+      	<p class="success_message"><?php echo $success_message; ?></p>
       <?php endif; ?>
       <?php foreach($items as $item): ?>
         <tr style="vertical-align:middle;text-align:center;<?php if($item['status'] != 1){echo 'background-color: #A9A9A9;';}?>">
