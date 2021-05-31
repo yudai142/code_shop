@@ -32,7 +32,7 @@ if(!empty($_POST)) {
 
 if(isset($_SESSION['message'])){
   $message = $_SESSION['message'];
-  $_SESSION['message'] = NULL;
+  unset($_SESSION['message']);
 }
 
 ?>
