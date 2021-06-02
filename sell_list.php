@@ -1,6 +1,13 @@
 <?php
 require_once "./dbc.php";
 session_start();
+
+if($_SESSION['name'] !== "admin"){
+  $_SESSION['message'] = 'アクセス権限がありません';
+  header('Location: ./index.php');
+  exit();
+}
+
 $items = getAllFile();
 
 // 商品の削除処理

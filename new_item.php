@@ -2,6 +2,12 @@
 session_start();
 require_once('dbc.php');
 
+if($_SESSION['name'] !== "admin"){
+  $_SESSION['message'] = 'アクセス権限がありません';
+  header('Location: ./index.php');
+  exit();
+}
+
 if (!empty($_POST)) {
   if ($_POST['name'] === '') {
     $error['name'] = 'blank';
