@@ -15,7 +15,7 @@ if ($_REQUEST["sql_kind"] === "delete" && is_numeric($_REQUEST['item_id']) && $_
   $id = $_REQUEST['item_id'];
   $statement = dbc()->prepare('DELETE FROM items WHERE id=?');
   $statement->execute(array($id));
-  $_SESSION['success_message'] = '商品を削除しました。';
+  $_SESSION['message'] = '商品を削除しました。';
   header('Location: ./sell_list.php');
   exit();
 }
@@ -46,7 +46,10 @@ if ($_REQUEST["sql_kind"] === "change" && is_numeric($_REQUEST['item_id']) && $_
   }
 }
 
-if(isset($_SESSION['success_message'])){
+if(isset($_SESSION['message'])){
+  $message = $_SESSION['message'];
+  unset($_SESSION['message']);
+}elseif(isset($_SESSION['success_message'])){
   $success_message = $_SESSION['success_message'];
   unset($_SESSION['success_message']);
 }
@@ -77,9 +80,11 @@ if(isset($_SESSION['success_message'])){
         </tr>
       </thead>
       <tbody>
-      <?php if(!empty($success_message) ): ?>
-      	<p class="success_message"><?php echo $success_message; ?></p>
-      <?php endif; ?>
+      <?php if(isset($message)):?>
+        <p class="text-danger"><?php echo $message; ?></p>
+      <?php elseif(isset($success_message)): ?>
+        <p class="text-primary"><?php echo $success_message; ?></p>
+      <?php endif;?>
       <?php foreach($items as $item): ?>
         <tr style="vertical-align:middle;text-align:center;<?php if($item['status'] != 1){echo 'background-color: #A9A9A9;';}?>">
           <td><img src="item_image/<?php echo "{$item['image']}" ?>" alt="" style="height:125px;"></td>

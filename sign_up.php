@@ -23,9 +23,17 @@ if (!empty($_POST) && empty($error)) {
 		sha1($_POST['password'])
 	));
   unset($_POST);
-  $_SESSION['message'] = "ユーザーを作成しました";
+  $_SESSION['success_message'] = "ユーザーを作成しました";
 	header('Location: login.php');
 	exit();
+}
+
+if(isset($_SESSION['message'])){
+  $message = $_SESSION['message'];
+  unset($_SESSION['message']);
+}elseif(isset($_SESSION['success_message'])){
+  $success_message = $_SESSION['success_message'];
+  unset($_SESSION['success_message']);
 }
 ?>
 
@@ -41,9 +49,11 @@ if (!empty($_POST) && empty($error)) {
 <body>
     <?php require_once "./read/header.php"; ?>
     <div class="container col-6">
-      <?php if (!empty($_POST) && empty($error)): ?>
-        <p><?php ver_dump($_POST); ?></p>
-      <?php endif; ?>
+      <?php if(isset($message)):?>
+        <p class="text-danger"><?php echo $message; ?></p>
+      <?php elseif(isset($success_message)): ?>
+        <p class="text-primary"><?php echo $success_message; ?></p>
+      <?php endif;?>
       <h2>ユーザー登録</h2>
         <form action="" method="post">
           <div class="form-group">
