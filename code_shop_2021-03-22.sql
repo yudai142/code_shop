@@ -52,30 +52,12 @@ CREATE TABLE `items` (
   `price` int(20) unsigned NOT NULL,
   `image` varchar(255) NOT NULL DEFAULT '',
   `status` tinyint(1) unsigned NOT NULL,
-  `user_id` bigint(20) unsigned NOT NULL,
+  `stock` int(20) unsigned NOT NULL DEFAULT '0',
   `created_date` datetime DEFAULT NULL,
   `updated_date` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `items_user_id_foreign` (`user_id`),
   CONSTRAINT `items_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
-# テーブルのダンプ stocks
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `stocks`;
-
-CREATE TABLE `stocks` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `item_id` bigint(20) unsigned NOT NULL,
-  `stock` int(20) unsigned NOT NULL DEFAULT '0',
-  `created_date` datetime DEFAULT NULL,
-  `updated_date` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `stocks_item_id_foreign` (`item_id`),
-  CONSTRAINT `stocks_item_id_foreign` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
