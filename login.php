@@ -69,7 +69,7 @@ if(isset($_SESSION['message'])){
           <input type="password" name="password" class="form-control" id="exampleInputPassword1" value="<?php print htmlspecialchars($_POST['password'], ENT_QUOTES); ?>">
         </div>
         <div class="form-group form-check">
-          <input type="checkbox" class="form-check-input" id="exampleCheck1">
+          <input type="checkbox" name="save" class="form-check-input" id="exampleCheck1" value="on">
           <label class="form-check-label" for="exampleCheck1">Check me out</label>
         </div>
         <button type="submit" class="btn btn-primary">ログイン</button>
