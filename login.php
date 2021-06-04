@@ -19,7 +19,7 @@ if(!empty($_POST)) {
       if($_POST['save'] === 'on') {
         setcookie('name', $_POST['name'], time()+60*60*24*14);
       }
-      $_SESSION['message'] = "ログインしました";
+      $_SESSION['success_message'] = "ログインしました";
       header("Location: ./index.php");
       exit;
     }else{
@@ -33,6 +33,9 @@ if(!empty($_POST)) {
 if(isset($_SESSION['message'])){
   $message = $_SESSION['message'];
   unset($_SESSION['message']);
+}elseif(isset($_SESSION['success_message'])){
+  $success_message = $_SESSION['success_message'];
+  unset($_SESSION['success_message']);
 }
 
 ?>
@@ -50,7 +53,9 @@ if(isset($_SESSION['message'])){
     <?php require_once "./read/header.php"; ?>
     <div class="container col-6">
       <?php if(isset($message)):?>
-        <?php echo $message; ?>
+        <p class="text-danger"><?php echo $message; ?></p>
+      <?php elseif(isset($success_message)): ?>
+        <p class="text-primary"><?php echo $success_message; ?></p>
       <?php endif;?>
       <h2>ユーザーログイン</h2>
       <form action="" method="post">

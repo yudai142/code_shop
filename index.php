@@ -6,6 +6,9 @@ $items = getOpenItems();
 if(isset($_SESSION['message'])){
   $message = $_SESSION['message'];
   unset($_SESSION['message']);
+}elseif(isset($_SESSION['success_message'])){
+  $success_message = $_SESSION['success_message'];
+  unset($_SESSION['success_message']);
 }
 ?>
 
@@ -23,7 +26,9 @@ if(isset($_SESSION['message'])){
 <?php require_once "./read/header.php"; ?>
 <div class="container col-7 pt-5">
   <?php if(isset($message)):?>
-    <?php echo $message; ?>
+    <p class="text-danger"><?php echo $message; ?></p>
+  <?php elseif(isset($success_message)): ?>
+    <p class="text-primary"><?php echo $success_message; ?></p>
   <?php endif;?>
   <div class="row">
     <?php foreach($items as $item): ?>
