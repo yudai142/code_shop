@@ -1,10 +1,10 @@
 <?php
-require_once "./dbc.php";
 session_start();
+require_once "../dbc/dbc.php";
 
 if($_SESSION['name'] !== "admin"){
   $_SESSION['message'] = 'アクセス権限がありません';
-  header('Location: ./index.php');
+  header('Location: index.php');
   exit();
 }
 
@@ -16,7 +16,7 @@ if ($_REQUEST["sql_kind"] === "delete" && is_numeric($_REQUEST['item_id']) && $_
   $statement = dbc()->prepare('DELETE FROM items WHERE id=?');
   $statement->execute(array($id));
   $_SESSION['message'] = '商品を削除しました。';
-  header('Location: ./sell_list.php');
+  header('Location: sell_list.php');
   exit();
 }
 
@@ -25,7 +25,7 @@ if ($_REQUEST["sql_kind"] === "update" && is_numeric($_REQUEST['item_id']) && $_
   $statement = dbc()->prepare('UPDATE items SET stock=? WHERE id=?');
   $statement->execute(array($_POST['update_stock'], $_REQUEST['item_id']));
   $_SESSION['success_message'] = '商品の在庫数を更新しました。';
-  header('Location: ./sell_list.php');
+  header('Location: sell_list.php');
   exit();
 }
 
@@ -35,13 +35,13 @@ if ($_REQUEST["sql_kind"] === "change" && is_numeric($_REQUEST['item_id']) && $_
     $statement = dbc()->prepare('UPDATE items SET status=? WHERE id=?');
     $statement->execute(array(0, $_REQUEST['item_id']));
     $_SESSION['success_message'] = '商品を非公開に設定しました。';
-    header('Location: ./sell_list.php');
+    header('Location: sell_list.php');
     exit();
   }else{
     $statement = dbc()->prepare('UPDATE items SET status=? WHERE id=?');
     $statement->execute(array(1, $_REQUEST['item_id']));
     $_SESSION['success_message'] = '商品を公開に設定しました。';
-    header('Location: ./sell_list.php');
+    header('Location: sell_list.php');
     exit();
   }
 }
@@ -62,11 +62,11 @@ if(isset($_SESSION['message'])){
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <?php require_once "./read/src_link.php" ?>
+    <?php require_once "../read/src_link.php" ?>
     <title>Document</title>
 </head>
 <body>
-    <?php require_once "./read/header.php"; ?>
+    <?php require_once "header.php"; ?>
     <div class="container col-10">
       <table class="table">
       <thead>
@@ -87,7 +87,7 @@ if(isset($_SESSION['message'])){
       <?php endif;?>
       <?php foreach($items as $item): ?>
         <tr style="vertical-align:middle;text-align:center;<?php if($item['status'] != 1){echo 'background-color: #A9A9A9;';}?>">
-          <td><img src="item_image/<?php echo "{$item['image']}" ?>" alt="" style="height:125px;"></td>
+          <td><img src="../item_image/<?php echo "{$item['image']}" ?>" alt="" style="height:125px;"></td>
           <td style="vertical-align:middle;"><?php echo "{$item['name']}" ?></td>
           <td style="vertical-align:middle;"><?php echo "{$item['price']}" ?>円</td>
           <td style="vertical-align:middle;">

@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('dbc.php');
+require_once "../dbc/dbc.php";
 
 if($_SESSION['name'] !== "admin"){
   $_SESSION['message'] = 'アクセス権限がありません';
@@ -60,11 +60,11 @@ if (!empty($_POST)) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <?php require_once "./read/src_link.php" ?>
+    <?php require_once "../read/src_link.php" ?>
     <title>Document</title>
 </head>
 <body>
-    <?php require_once "./read/header.php"; ?>
+    <?php require_once "header.php"; ?>
     <div class="container col-6">
       <h2>商品の登録</h2>
         <form action="" method="post" enctype="multipart/form-data">

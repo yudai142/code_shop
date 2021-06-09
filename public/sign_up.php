@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('dbc.php');
+require_once "../dbc/dbc.php";
 
 if (!empty($_POST)) {
 
@@ -43,11 +43,11 @@ if(isset($_SESSION['message'])){
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <?php require_once "./read/src_link.php" ?>
+    <?php require_once "../read/src_link.php" ?>
     <title>Document</title>
 </head>
 <body>
-    <?php require_once "./read/header.php"; ?>
+    <?php require_once "header.php"; ?>
     <div class="container col-6">
       <?php if(isset($message)):?>
         <p class="text-danger"><?php echo $message; ?></p>

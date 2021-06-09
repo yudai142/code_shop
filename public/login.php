@@ -1,6 +1,6 @@
 <?php 
 session_start();
-require('dbc.php'); 
+require('../dbc/dbc.php'); 
 
 if($_COOKIE['name'] !== '') {
   $name = $_COOKIE['name'];
@@ -20,7 +20,7 @@ if(!empty($_POST)) {
         setcookie('name', $_POST['name'], time()+60*60*24*14);
       }
       $_SESSION['success_message'] = "ログインしました";
-      header("Location: ./index.php");
+      header("Location: item_list.php");
       exit;
     }else{
       $error['login'] = 'failed';
@@ -46,11 +46,11 @@ if(isset($_SESSION['message'])){
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <?php require_once "./read/src_link.php" ?>
+    <?php require_once "../read/src_link.php" ?>
     <title>Document</title>
 </head>
 <body>
-    <?php require_once "./read/header.php"; ?>
+    <?php require_once "header.php"; ?>
     <div class="container col-6">
       <?php if(isset($message)):?>
         <p class="text-danger"><?php echo $message; ?></p>
