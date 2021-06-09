@@ -24,16 +24,22 @@ if (!empty($_POST)) {
 }
 
 if (!empty($_POST) && empty($error)) {
-  UserLogic::createUser($_POST);
-	// $statement = dbc()->prepare('INSERT INTO users SET user_name=?, password=?, created_date=NOW()');
-	// $statement->execute(array(
-		// $_POST['name'],
-		// sha1($_POST['password'])
-	// ));
-  // unset($_POST);
-  $_SESSION['success_message'] = "ユーザーを作成しました";
-	header('Location: login.php');
-	exit();
+  // ユーザー名が重複していないかのチェック
+  $user = UserLogic::getUserByUserName($_POST['name']);
+  if (!$user) {
+    UserLogic::createUser($_POST);
+    // $statement = dbc()->prepare('INSERT INTO users SET user_name=?, password=?, created_date=NOW()');
+    // $statement->execute(array(
+      // $_POST['name'],
+      // sha1($_POST['password'])
+    // ));
+    // unset($_POST);
+    $_SESSION['success_message'] = "ユーザーを作成しました";
+    header('Location: login.php');
+    exit();
+  }else{
+    $_SESSION['msg'] = '既に使われているユーザー名です';
+  }
 }
 
 if(isset($_SESSION['message'])){
@@ -43,6 +49,11 @@ if(isset($_SESSION['message'])){
   $success_message = $_SESSION['success_message'];
   unset($_SESSION['success_message']);
 }
+if(isset($_SESSION['msg'])){
+  $err['msg'] = $_SESSION['msg'];
+  unset($_SESSION['msg']);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -57,6 +68,9 @@ if(isset($_SESSION['message'])){
 <body>
     <?php require_once "header.php"; ?>
     <div class="container col-6">
+      <?php if(isset($err['msg'])): ?>
+        <p class="text-danger"><?php echo $err['msg'];?></p>
+      <?php endif ?>
       <?php if(isset($message)):?>
         <p class="text-danger"><?php echo $message; ?></p>
       <?php elseif(isset($success_message)): ?>
