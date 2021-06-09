@@ -10,6 +10,7 @@ if(isset($_SESSION['message'])){
   $success_message = $_SESSION['success_message'];
   unset($_SESSION['success_message']);
 }
+
 ?>
 
 <!DOCTYPE html>

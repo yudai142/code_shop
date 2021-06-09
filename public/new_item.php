@@ -2,9 +2,9 @@
 session_start();
 require_once "../dbc/dbc.php";
 
-if($_SESSION['name'] !== "admin"){
+if($_SESSION["login_user"]['user_name'] !== "admin"){
   $_SESSION['message'] = 'アクセス権限がありません';
-  header('Location: ./index.php');
+  header('Location: item_list.php');
   exit();
 }
 
@@ -35,18 +35,17 @@ if (!empty($_POST)) {
 
   if (!empty($_POST) && empty($error)) {
     $image = date('YmdHis') . $_FILES['image']['name'];
-    move_uploaded_file($_FILES['image']['tmp_name'], './item_image/' . $image);
-    $statement = dbc()->prepare('INSERT INTO items SET name=?, price=?, image=?, status=?, stock=?, user_id=?');
+    move_uploaded_file($_FILES['image']['tmp_name'], '../item_image/' . $image);
+    $statement = dbc()->prepare('INSERT INTO items SET name=?, price=?, image=?, status=?, stock=?');
     $statement->execute(array(
       $_POST['name'],
       (int)$_POST['price'],
       $image,
       (int)$_POST['status'],
-      (int)$_POST['stock'],
-      (int)$_SESSION['id']
+      (int)$_POST['stock']
     ));
-    $_SESSION['message'] = "商品を登録しました";
-    header('Location: ./index.php');
+    $_SESSION['success_message'] = "商品を登録しました";
+    header('Location: item_list.php');
     exit();
   }
 

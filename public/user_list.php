@@ -1,8 +1,8 @@
 <?php 
 
-if($_SESSION['name'] !== "admin"){
+if($_SESSION["login_user"]['user_name'] !== "admin"){
   $_SESSION['message'] = 'アクセス権限がありません';
-  header('Location: ./index.php');
+  header('Location: item_list.php');
   exit();
 }
 

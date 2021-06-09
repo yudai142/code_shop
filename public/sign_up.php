@@ -1,6 +1,13 @@
 <?php
 session_start();
 require_once "../dbc/dbc.php";
+require_once '../functions/UserLogic.php';
+
+$result = UserLogic::checkLogin();
+if($result){
+  header('Location: mypage.php');
+  return;
+}
 
 if (!empty($_POST)) {
 
@@ -17,12 +24,13 @@ if (!empty($_POST)) {
 }
 
 if (!empty($_POST) && empty($error)) {
-	$statement = dbc()->prepare('INSERT INTO users SET user_name=?, password=?, created_date=NOW()');
-	$statement->execute(array(
-		$_POST['name'],
-		sha1($_POST['password'])
-	));
-  unset($_POST);
+  UserLogic::createUser($_POST);
+	// $statement = dbc()->prepare('INSERT INTO users SET user_name=?, password=?, created_date=NOW()');
+	// $statement->execute(array(
+		// $_POST['name'],
+		// sha1($_POST['password'])
+	// ));
+  // unset($_POST);
   $_SESSION['success_message'] = "ユーザーを作成しました";
 	header('Location: login.php');
 	exit();
