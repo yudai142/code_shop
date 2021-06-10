@@ -18,19 +18,18 @@ if($_COOKIE['name'] !== '') {
 }
 
 if(!empty($_POST)){
-  $name = $_POST['name'];
-  $err = [];
-  // バリデーション(ユーザー名、アドレスが記入されているかの判定)
-  if(!$user_name = filter_input(INPUT_POST, 'name')) {
-    $err['name'] = 'ユーザー名を記入してください';
-  }
-  
-  if(!$password = filter_input(INPUT_POST, 'password')){
-    $err['password'] = "パスワードを記入してください";
-  }
-  
-  if(!count($err) > 0) {
-    $result = UserLogic::login($user_name, $password);
+  if($_POST['name'] === "admin" && $_POST['password'] === "admin"){
+    // adminがSQLに登録されていないかのチェック
+    $user = UserLogic::getUserByUserName($_POST['name']);
+    if(!$user){;
+      $hasCreated = UserLogic::createUser($_POST);
+      if(!$hasCreated){
+        $_SESSION['message'] = "adminの作成が失敗しました";
+        header("Location: login.php");
+        exit();
+      }
+    }
+    $result = UserLogic::login($_POST['name'], $_POST['password']);
     if($result) {
       $hasChecked = UserLogic::checkLogin();
       if($hasChecked){
@@ -38,11 +37,40 @@ if(!empty($_POST)){
           setcookie('name', $_POST['name'], time()+60*60*24*14);
         }
         // ログイン後の処理
-        $_SESSION['success_message'] = "ログインしました";
-        header("Location: item_list.php");
+        $_SESSION['success_message'] = "管理者でログインしました";
+        header("Location: sell_list.php");
         exit;
       }else{
         $_SESSION['message'] = "ログインに失敗しました";
+      }
+    }
+  }else{
+    $name = $_POST['name'];
+    $err = [];
+    // バリデーション(ユーザー名、アドレスが記入されているかの判定)
+    if(!$user_name = filter_input(INPUT_POST, 'name')) {
+      $err['name'] = 'ユーザー名を記入してください';
+    }
+
+    if(!$password = filter_input(INPUT_POST, 'password')){
+      $err['password'] = "パスワードを記入してください";
+    }
+
+    if(!count($err) > 0) {
+      $result = UserLogic::login($user_name, $password);
+      if($result) {
+        $hasChecked = UserLogic::checkLogin();
+        if($hasChecked){
+          if($_POST['save'] === 'on') {
+            setcookie('name', $_POST['name'], time()+60*60*24*14);
+          }
+          // ログイン後の処理
+          $_SESSION['success_message'] = "ログインしました";
+          header("Location: item_list.php");
+          exit;
+        }else{
+          $_SESSION['message'] = "ログインに失敗しました";
+        }
       }
     }
   }

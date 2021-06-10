@@ -54,6 +54,10 @@ if (!empty($_POST) && empty($error)) {
   }
 }
 
+if(!isset($_SESSION['csrf_token'])){
+  unset($_SESSION['csrf_token']);
+}
+
 if(isset($_SESSION['message'])){
   $message = $_SESSION['message'];
   unset($_SESSION['message']);

@@ -56,7 +56,7 @@ class UserLogic {
    * @param string $user_name
    * @return array|bool $user|false
    */
-  public static function getUserByUserName($user_name){
+  public static function getUserByUserName($check_name){
     // SQLの準備
     // SQLの実行
     // SQLの結果を返す
@@ -64,7 +64,7 @@ class UserLogic {
 
     // ユーザデータを配列に入れる
     $arr = [];
-    $arr[] = $user_name;
+    $arr[] = $check_name;
 
     try {
       $stmt = dbc()->prepare($sql);
