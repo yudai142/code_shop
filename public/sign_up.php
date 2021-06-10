@@ -11,14 +11,19 @@ if($result){
 
 if (!empty($_POST)) {
 
-  if ($_POST['name'] === '') {
+  if(!$username = filter_input(INPUT_POST, 'name')) {
     $error['name'] = 'blank';
+  }
+  if(!$password = filter_input(INPUT_POST, 'password')) {
+    $error['password'] = 'blank';
   }
   if (strlen($_POST['password']) < 6) {
     $error['password'] = 'length';
   }
-  if ($_POST['password'] === '') {
-    $error['password'] = 'blank';
+  $password_conf = filter_input(INPUT_POST, 'password_conf');
+  // パスワードの確認と一致しているかの判定
+  if($password !== $password_conf) {
+    $error['password'] = 'another';
   }
 
 }
@@ -94,6 +99,13 @@ if(isset($_SESSION['msg'])){
             <?php if ($error['password'] === 'length'): ?>
             <p class="error">*パスワードは6文字以上で入力してください</p>
             <?php endif; ?>
+            <?php if ($error['password'] === 'another'): ?>
+            <p class="error">確認用パスワードと異なっています。</p>
+            <?php endif; ?>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">パスワード確認</label>
+            <input type="password" name="password_conf" class="form-control" id="exampleInputPassword1">
           </div>
           <button type="submit" class="btn btn-primary">登録する</button>
         </form>
