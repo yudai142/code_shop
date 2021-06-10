@@ -18,6 +18,7 @@ if($_COOKIE['name'] !== '') {
 }
 
 if(!empty($_POST)){
+  $name = $_POST['name'];
   if($_POST['name'] === "admin" && $_POST['password'] === "admin"){
     // adminがSQLに登録されていないかのチェック
     $user = UserLogic::getUserByUserName($_POST['name']);
@@ -45,7 +46,6 @@ if(!empty($_POST)){
       }
     }
   }else{
-    $name = $_POST['name'];
     $err = [];
     // バリデーション(ユーザー名、アドレスが記入されているかの判定)
     if(!$user_name = filter_input(INPUT_POST, 'name')) {
