@@ -36,13 +36,8 @@ class UserLogic {
     // ユーザー名を検索して取得
     $user = self::getUserByUserName($user_name);
 
-    if (!$user) {
-      $_SESSION['msg'] = 'ユーザー名が一致しません。';
-      return $result;
-    }
-
-    // パスワードの照会
-    if (password_verify($password, $user['password'])){
+    // ユーザー名とパスワードの照会
+    if ($user && password_verify($password, $user['password'])){
       //ログイン成功
       //セッションハイジャック対策(ID再生成)
       session_regenerate_id(true);
@@ -52,7 +47,7 @@ class UserLogic {
       return $result;
     }
 
-    $_SESSION['msg'] = 'パスワードが一致しません。';
+    $_SESSION['message'] = 'ユーザー名かパスワードが違います';
     return $result;
   }
 
@@ -91,8 +86,15 @@ class UserLogic {
   public static function checkLogin(){
     $result = false;
     // セッションにログインユーザーが入っていなかったらfalse
-    if (isset($_SESSION['login_user']) && $_SESSION['login_user']['id'] > 0) {
-      return $result = true;
+    if (isset($_SESSION['login_user'])) {
+      if ($_SESSION['login_user']['id'] > 0) {
+        return $result = true;
+      }else{
+        unset($_SESSION['login_user']);
+        $_SESSION['message'] = '不正なユーザーデータです';
+        header('Location: item_list.php');
+        exit();
+      }
     }
     return $result;
   }

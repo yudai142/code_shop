@@ -41,9 +41,6 @@ function getAllUser(){
   $fileData = dbc()->query($sql);
   return $fileData;
 }
-// 悪質な入力があった際にエスケープ処理を行う
-function h($s) {
-  return htmlspecialchars($s, ENT_QUOTES, "UTF-8");
-}
+
 
 ?>
