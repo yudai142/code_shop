@@ -19,8 +19,9 @@
 
   // ログインしているか判定し、セッションが切れていたらログインしてくださいとメッセージを出す。
   if (!$result = UserLogic::checkLogin()) {
-    exit('セッションが切れましたので、ログインし直してください');
-    return;
+    $_SESSION['message'] = "セッションが切れましたので、ログインし直してください";
+    header('Location: item_list.php');
+    exit();
   }
 
   // ログアウトする

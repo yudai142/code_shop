@@ -4,8 +4,8 @@ require_once "../dbc/dbc.php";
 require_once '../functions/security.php';
 require_once '../functions/UserLogic.php';
 
-$result = UserLogic::checkLogin();
-if($result){
+
+if($result = UserLogic::checkLogin()){
   $_SESSION['success_message'] = "既にログインしています";
   header('Location: item_list.php');
   return;
@@ -13,25 +13,25 @@ if($result){
 
 if (!empty($_POST)) {
   if(!$username = filter_input(INPUT_POST, 'name')) {
-    $error['name'] = 'ユーザー名を入力してください';
+    $err['name'] = 'ユーザー名を入力してください';
   }elseif(!preg_match("/\A[a-z\d]{6,100}+\z/i",$username)){
-    $error['name'] = 'ユーザー名は6文字以上100文字以下で、半角英数字で入力してください。';
+    $err['name'] = 'ユーザー名は6文字以上100文字以下で、半角英数字で入力してください。';
   }
 
   if(!$password = filter_input(INPUT_POST, 'password')) {
-    $error['password'] = 'パスワードを入力してください';
+    $err['password'] = 'パスワードを入力してください';
   }elseif(!preg_match("/\A[a-z\d]{6,100}+\z/i",$password)){
-    $error['password'] = 'パスワードは6文字以上100文字以下で、半角英数字で入力してください。';
+    $err['password'] = 'パスワードは6文字以上100文字以下で、半角英数字で入力してください。';
   }
   // パスワードの確認と一致しているかの判定
   if(!$password_conf = filter_input(INPUT_POST, 'password_conf')){
-    $error['password_conf'] = 'パスワードを再度入力してください';
+    $err['password_conf'] = 'パスワードを再度入力してください';
   }elseif($password !== $password_conf) {
-    $error['password_conf'] = '確認用パスワードと異なっています';
+    $err['password_conf'] = '確認用パスワードと異なっています';
   }
 }
 
-if (!empty($_POST) && empty($error)) {
+if (!empty($_POST) && empty($err)) {
   // CSRF対策処理
   $token = filter_input(INPUT_POST, 'csrf_token');
   // トークンがない、もしくは一致しない場合、処理を中止
@@ -40,10 +40,8 @@ if (!empty($_POST) && empty($error)) {
   }
   unset($_SESSION['csrf_token']);
   // ユーザー名が重複していないかのチェック
-  $user = UserLogic::getUserByUserName($username);
-  if (!$user) {
-    $hasCreated = UserLogic::createUser($_POST);
-    if($hasCreated) {
+  if (!$user = UserLogic::getUserByUserName($username)) {
+    if($hasCreated = UserLogic::createUser($_POST)) {
       $_SESSION['success_message'] = "ユーザーを作成しました";
       header('Location: login.php');
       exit();
@@ -51,7 +49,7 @@ if (!empty($_POST) && empty($error)) {
       $_SESSION['message'] = "登録に失敗しました";
     }
   }else{
-    $error['name'] = '既に使われているユーザー名は登録できません';
+    $err['name'] = '既に使われているユーザー名は登録できません';
   }
 }
 
@@ -91,22 +89,22 @@ if(isset($_SESSION['message'])){
           <div class="form-group">
             <label for="exampleInputEmail1">ユーザー名</label>
             <input type="text" name="name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-            <?php if (isset($error['name'])): ?>
-              <p class="error text-danger"><?php echo $error['name'] ?></p>
+            <?php if (isset($err['name'])): ?>
+              <p class="error text-danger"><?php echo $err['name'] ?></p>
             <?php endif; ?>
           </div>
           <div class="form-group">
             <label for="exampleInputPassword1">パスワード</label>
             <input type="password" name="password" class="form-control" id="exampleInputPassword1">
-            <?php if (isset($error['password'])): ?>
-              <p class="error text-danger"><?php echo $error['password'] ?></p>
+            <?php if (isset($err['password'])): ?>
+              <p class="error text-danger"><?php echo $err['password'] ?></p>
             <?php endif; ?>
           </div>
           <div class="form-group">
             <label for="exampleInputPassword1">パスワード確認</label>
             <input type="password" name="password_conf" class="form-control" id="exampleInputPassword1">
-            <?php if (isset($error['password_conf'])): ?>
-              <p class="error text-danger"><?php echo $error['password_conf'] ?></p>
+            <?php if (isset($err['password_conf'])): ?>
+              <p class="error text-danger"><?php echo $err['password_conf'] ?></p>
             <?php endif; ?>
           </div>
           <input type="hidden" name="csrf_token" value="<?php echo h(setToken()); ?>">

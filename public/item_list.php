@@ -1,8 +1,13 @@
 <?php 
-require_once "../dbc/dbc.php";
 session_start();
+require_once "../dbc/dbc.php";
+require_once '../functions/security.php';
+require_once '../functions/UserLogic.php';
 
+
+UserLogic::checkLogin();
 $items = getOpenItems();
+
 if(isset($_SESSION['message'])){
   $message = $_SESSION['message'];
   unset($_SESSION['message']);

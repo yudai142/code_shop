@@ -6,8 +6,7 @@ require_once '../functions/UserLogic.php';
 
 
 // ログインしているか判定し、していれば商品一覧ページに移動
-$result = UserLogic::checkLogin();
-if($result){
+if($result = UserLogic::checkLogin()){
   $_SESSION['success_message'] = "既にログインしています";
   header('Location: item_list.php');
   return;
@@ -22,10 +21,8 @@ if(!empty($_POST)){
   $name = $_POST['name'];
   if($_POST['name'] === "admin" && $_POST['password'] === "admin"){
     // adminがSQLに登録されていないかのチェック
-    $user = UserLogic::getUserByUserName($_POST['name']);
-    if(!$user){;
-      $hasCreated = UserLogic::createUser($_POST);
-      if(!$hasCreated){
+    if(!$user = UserLogic::getUserByUserName($_POST['name'])){
+      if(!$hasCreated = UserLogic::createUser($_POST)){
         $_SESSION['message'] = "adminの作成が失敗しました";
         header("Location: login.php");
         exit();
@@ -45,7 +42,6 @@ if(!empty($_POST)){
       $_SESSION['message'] = "ログインに失敗しました";
     }
   }else{
-    $err = [];
     // バリデーション(ユーザー名、アドレスが記入されているかの判定)
     if(!$user_name = filter_input(INPUT_POST, 'name')) {
       $err['name'] = 'ユーザー名を記入してください';
@@ -55,7 +51,7 @@ if(!empty($_POST)){
       $err['password'] = "パスワードを記入してください";
     }
 
-    if(!count($err) > 0) {
+    if(empty($err)) {
       $result = UserLogic::login($user_name, $password);
       $hasChecked = UserLogic::checkLogin();
       if($result && $hasChecked) {
