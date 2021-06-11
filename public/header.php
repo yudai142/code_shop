@@ -17,7 +17,7 @@
           <a href="../public/sell_list.php" class="btn btn-warning">商品管理ページ</a>
           <a href="../public/new_item.php" class="btn btn-info">商品登録</a>
         <?php endif;?>
-        <form action="logout.php" method="post">
+        <form action="logout.php" method="post" class="d-inline">
           <input type="submit" name="logout" class="btn btn-danger" value="ログアウト">
         </form>
       <?php else: ?>
