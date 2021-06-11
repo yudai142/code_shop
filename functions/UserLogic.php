@@ -87,7 +87,8 @@ class UserLogic {
     $result = false;
     // セッションにログインユーザーが入っていなかったらfalse
     if (isset($_SESSION['login_user'])) {
-      if ($_SESSION['login_user']['id'] > 0) {
+      $user = self::getUserByUserName($_SESSION['login_user']["user_name"]);
+      if ($user && $_SESSION['login_user']['id'] > 0) {
         return $result = true;
       }else{
         unset($_SESSION['login_user']);

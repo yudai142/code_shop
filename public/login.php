@@ -8,6 +8,7 @@ require_once '../functions/UserLogic.php';
 // ログインしているか判定し、していれば商品一覧ページに移動
 $result = UserLogic::checkLogin();
 if($result){
+  $_SESSION['success_message'] = "既にログインしています";
   header('Location: item_list.php');
   return;
 }
@@ -31,19 +32,17 @@ if(!empty($_POST)){
       }
     }
     $result = UserLogic::login($_POST['name'], $_POST['password']);
-    if($result) {
-      $hasChecked = UserLogic::checkLogin();
-      if($hasChecked){
-        if($_POST['save'] === 'on') {
-          setcookie('name', $_POST['name'], time()+60*60*24*14);
-        }
-        // ログイン後の処理
-        $_SESSION['success_message'] = "管理者でログインしました";
-        header("Location: sell_list.php");
-        exit;
-      }else{
-        $_SESSION['message'] = "ログインに失敗しました";
+    $hasChecked = UserLogic::checkLogin();
+    if($result && $hasChecked) {
+      if($_POST['save'] === 'on') {
+        setcookie('name', $_POST['name'], time()+60*60*24*14);
       }
+      // ログイン後の処理
+      $_SESSION['success_message'] = "管理者でログインしました";
+      header("Location: sell_list.php");
+      exit;
+    }else{
+      $_SESSION['message'] = "ログインに失敗しました";
     }
   }else{
     $err = [];
@@ -58,19 +57,17 @@ if(!empty($_POST)){
 
     if(!count($err) > 0) {
       $result = UserLogic::login($user_name, $password);
-      if($result) {
-        $hasChecked = UserLogic::checkLogin();
-        if($hasChecked){
-          if($_POST['save'] === 'on') {
-            setcookie('name', $_POST['name'], time()+60*60*24*14);
-          }
-          // ログイン後の処理
-          $_SESSION['success_message'] = "ログインしました";
-          header("Location: item_list.php");
-          exit;
-        }else{
-          $_SESSION['message'] = "ログインに失敗しました";
+      $hasChecked = UserLogic::checkLogin();
+      if($result && $hasChecked) {
+        if($_POST['save'] === 'on') {
+          setcookie('name', $_POST['name'], time()+60*60*24*14);
         }
+        // ログイン後の処理
+        $_SESSION['success_message'] = "ログインしました";
+        header("Location: item_list.php");
+        exit;
+      }else{
+        $_SESSION['message'] = "ログインに失敗しました";
       }
     }
   }

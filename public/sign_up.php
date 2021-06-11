@@ -6,7 +6,8 @@ require_once '../functions/UserLogic.php';
 
 $result = UserLogic::checkLogin();
 if($result){
-  header('Location: mypage.php');
+  $_SESSION['success_message'] = "既にログインしています";
+  header('Location: item_list.php');
   return;
 }
 
