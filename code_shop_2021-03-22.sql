@@ -55,9 +55,7 @@ CREATE TABLE `items` (
   `stock` int(20) unsigned NOT NULL DEFAULT '0',
   `created_date` datetime DEFAULT NULL,
   `updated_date` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `items_user_id_foreign` (`user_id`),
-  CONSTRAINT `items_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
