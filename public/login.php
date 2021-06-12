@@ -13,8 +13,8 @@ if($result = UserLogic::checkLogin()){
 }
 
 // 前回チェックボックスをつけてログインした場合、ユーザー名に前回のユーザー名が自動入力される
-if($_COOKIE['name'] !== '') {
-  $name = $_COOKIE['name'];
+if($cookie_name = filter_input(INPUT_COOKIE, 'name', FILTER_SANITIZE_SPECIAL_CHARS)) {
+  $name = $cookie_name;
 }
 
 if(!empty($_POST)){
@@ -43,11 +43,11 @@ if(!empty($_POST)){
     }
   }else{
     // バリデーション(ユーザー名、アドレスが記入されているかの判定)
-    if(!$user_name = filter_input(INPUT_POST, 'name')) {
+    if(!$user_name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS)) {
       $err['name'] = 'ユーザー名を記入してください';
     }
 
-    if(!$password = filter_input(INPUT_POST, 'password')){
+    if(!$password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS)){
       $err['password'] = "パスワードを記入してください";
     }
 

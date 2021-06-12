@@ -21,21 +21,6 @@ function dbc(){
   }
 }
 
-// ファイルデータの取得
-// @return array $fileData
-
-function getAllFile(){
-  $sql = "SELECT * FROM items";
-  $fileData = dbc()->query($sql);
-  return $fileData;
-}
-
-function getOpenItems(){
-  $sql = "SELECT * FROM items WHERE status = 1";
-  $fileData = dbc()->query($sql);
-  return $fileData;
-}
-
 function getAllUser(){
   $sql = "SELECT * FROM users";
   $fileData = dbc()->query($sql);

@@ -1,6 +1,8 @@
 <?php
 session_start();
 require_once "../dbc/dbc.php";
+require_once '../functions/ItemLogic.php';
+require_once '../functions/UserLogic.php';
 
 if($_SESSION["login_user"]['user_name'] !== "admin"){
   $_SESSION['message'] = 'アクセス権限がありません';
@@ -8,7 +10,8 @@ if($_SESSION["login_user"]['user_name'] !== "admin"){
   exit();
 }
 
-$items = getAllFile();
+UserLogic::checkLogin();
+$items = ItemLogic::getAllFile();
 
 // 商品の削除処理
 if ($_REQUEST["sql_kind"] === "delete" && is_numeric($_REQUEST['item_id']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -92,7 +95,7 @@ if(isset($_SESSION['message'])){
           <td style="vertical-align:middle;"><?php echo "{$item['price']}" ?>円</td>
           <td style="vertical-align:middle;">
           <form action="" method="post">
-            <input type="text" style="width:60px;text-align:right;" name="update_stock" value="<?php echo "{$item['stock']}" ?>">個&nbsp;&nbsp;<input type="submit" value="変更する" class="btn btn-primary">
+            <input type="number" min="0" style="width:60px;text-align:right;" name="update_stock" value="<?php echo "{$item['stock']}" ?>">個&nbsp;&nbsp;<input type="submit" value="変更する" class="btn btn-primary">
             <input type="hidden" name="item_id" value="<?php echo "{$item['id']}" ?>">
             <input type="hidden" name="sql_kind" value="update">
           </form>

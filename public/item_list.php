@@ -3,10 +3,10 @@ session_start();
 require_once "../dbc/dbc.php";
 require_once '../functions/security.php';
 require_once '../functions/UserLogic.php';
-
+require_once '../functions/ItemLogic.php';
 
 UserLogic::checkLogin();
-$items = getOpenItems();
+$items = ItemLogic::getOpenItems();
 
 if(isset($_SESSION['message'])){
   $message = $_SESSION['message'];
@@ -45,7 +45,11 @@ if(isset($_SESSION['message'])){
         </figure>
         <div class="card-body">
           <h5 class="card-title"><?php echo "{$item['name']}" ?></h5>
-          <a href="#" class="btn btn-primary">カートに入れる</a>
+          <?php if(filter_var($item['stock'])) : ?>
+          <a href="" class="btn btn-primary">カートに入れる</a>
+          <?php else :?>
+          <span class="btn btn-danger disabled">売り切れ</span>
+          <?php endif ;?>
         </div>
       </div>
     </div>
