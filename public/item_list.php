@@ -41,10 +41,11 @@ if(isset($_SESSION['message'])){
     <div class="col-4">
       <div class="card mb-4 shadow-sm">
         <figure class="figure mx-auto pt-2 pb-2 mb-0">
-          <img class="rounded" src="../item_image/<?php echo "{$item['image']}" ?>" alt="Card image cap"  style="height:125px;">
+          <img class="rounded" src="<?php echo h($item['image']) ?>" alt="Card image cap"  style="height:125px;">
         </figure>
         <div class="card-body">
-          <h5 class="card-title"><?php echo "{$item['name']}" ?></h5>
+          <h5 class="card-title"><?php echo h(mb_strimwidth(strip_tags($item['name']), 0, 24, '…', 'UTF-8' )) ?></h5>
+          <p class="fw-bolder"><?php echo h($item['price']) ?>円</p>
           <?php if(filter_var($item['stock'])) : ?>
           <a href="" class="btn btn-primary">カートに入れる</a>
           <?php else :?>

@@ -3,6 +3,7 @@ session_start();
 require_once "../dbc/dbc.php";
 require_once '../functions/ItemLogic.php';
 require_once '../functions/UserLogic.php';
+require_once '../functions/security.php';
 
 if($_SESSION["login_user"]['user_name'] !== "admin"){
   $_SESSION['message'] = 'アクセス権限がありません';
@@ -58,13 +59,13 @@ if(isset($_SESSION['message'])){
       <?php endif;?>
       <?php foreach($items as $item): ?>
         <tr style="vertical-align:middle;text-align:center;<?php if($item['status'] != 1){echo 'background-color: #A9A9A9;';}?>">
-          <td><img src="../item_image/<?php echo "{$item['image']}" ?>" alt="" style="height:125px;"></td>
-          <td style="vertical-align:middle;"><?php echo "{$item['name']}" ?></td>
-          <td style="vertical-align:middle;"><?php echo "{$item['price']}" ?>円</td>
+          <td><img src="../item_image/<?php echo h($item['image']) ?>" alt="" style="height:125px;"></td>
+          <td style="vertical-align:middle;"><?php echo h($item['name']) ?></td>
+          <td style="vertical-align:middle;"><?php echo h($item['price']) ?>円</td>
           <td style="vertical-align:middle;">
           <form action="" method="post">
-            <input type="number" min="0" style="width:60px;text-align:right;" name="update_stock" value="<?php echo "{$item['stock']}" ?>">個&nbsp;&nbsp;<input type="submit" value="変更する" class="btn btn-primary">
-            <input type="hidden" name="item_id" value="<?php echo "{$item['id']}" ?>">
+            <input type="number" min="0" style="width:60px;text-align:right;" name="update_stock" value="<?php echo h($item['stock']) ?>">個&nbsp;&nbsp;<input type="submit" value="変更する" class="btn btn-primary">
+            <input type="hidden" name="item_id" value="<?php echo h($item['id']) ?>">
             <input type="hidden" name="sql_kind" value="update">
           </form>
           </td>
@@ -76,14 +77,14 @@ if(isset($_SESSION['message'])){
           <input type="submit" class="btn btn-success" value="公開する">
           <?php endif ?>
           </td>
-          <input type="hidden" name="change_status" value="<?php echo "{$item['status']}" ?>">
-          <input type="hidden" name="item_id" value="<?php echo "{$item['id']}" ?>">
+          <input type="hidden" name="change_status" value="<?php echo h($item['status']) ?>">
+          <input type="hidden" name="item_id" value="<?php echo h($item['id']) ?>">
           <input type="hidden" name="sql_kind" value="change">
           </form>
           <td style="vertical-align:middle;">
           <form action="" method="post">
             <input type="submit" value="削除する" class="btn btn-danger">
-            <input type="hidden" name="item_id" value="<?php echo "{$item['id']}" ?>">
+            <input type="hidden" name="item_id" value="<?php echo h($item['id']) ?>">
             <input type="hidden" name="sql_kind" value="delete">
           </form>
           </td>

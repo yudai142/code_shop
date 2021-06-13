@@ -20,16 +20,17 @@ class ItemLogic {
     $result = False;
     $image = date('YmdHis') . basename($itemFile['image']['name']);
     $upload_dir = '../item_image/';
-    move_uploaded_file($itemFile['image']['tmp_name'], $upload_dir . $image);
+    $imageFile = $upload_dir . $image;
+    move_uploaded_file($itemFile['image']['tmp_name'], $imageFile);
     $sql = "INSERT INTO items (name, price, image, status, stock) VALUE (?, ?, ?, ?, ?)";
   
     try{
       $stmt = dbc()->prepare($sql);
-      $stmt->bindValue(1,$itemData['name']);
-      $stmt->bindValue(2,(int)$itemData['price']);
-      $stmt->bindValue(3,$image);
-      $stmt->bindValue(4,(int)$itemData['status']);
-      $stmt->bindValue(5,(int)$itemData['stock']);
+      $stmt->bindValue(1, $itemData['name']);
+      $stmt->bindValue(2, (int)$itemData['price']);
+      $stmt->bindValue(3, $imageFile);
+      $stmt->bindValue(4, (int)$itemData['status']);
+      $stmt->bindValue(5, (int)$itemData['stock']);
       $result = $stmt->execute();
       return $result;
     }catch(\Exception $e){
