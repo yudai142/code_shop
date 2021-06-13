@@ -13,40 +13,8 @@ if($_SESSION["login_user"]['user_name'] !== "admin"){
 UserLogic::checkLogin();
 $items = ItemLogic::getAllFile();
 
-// 商品の削除処理
-if ($_REQUEST["sql_kind"] === "delete" && is_numeric($_REQUEST['item_id']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
-  $id = $_REQUEST['item_id'];
-  $statement = dbc()->prepare('DELETE FROM items WHERE id=?');
-  $statement->execute(array($id));
-  $_SESSION['message'] = '商品を削除しました。';
-  header('Location: sell_list.php');
-  exit();
-}
-
-// 在庫数の更新処理
-if ($_REQUEST["sql_kind"] === "update" && is_numeric($_REQUEST['item_id']) && $_SERVER['REQUEST_METHOD'] === 'POST' && is_numeric($_POST['update_stock'])) {
-  $statement = dbc()->prepare('UPDATE items SET stock=? WHERE id=?');
-  $statement->execute(array($_POST['update_stock'], $_REQUEST['item_id']));
-  $_SESSION['success_message'] = '商品の在庫数を更新しました。';
-  header('Location: sell_list.php');
-  exit();
-}
-
-// 公開・非公開の切り替え処理
-if ($_REQUEST["sql_kind"] === "change" && is_numeric($_REQUEST['item_id']) && $_SERVER['REQUEST_METHOD'] === 'POST' && is_numeric($_REQUEST['change_status'])) {
-  if($_REQUEST['change_status'] == 1){
-    $statement = dbc()->prepare('UPDATE items SET status=? WHERE id=?');
-    $statement->execute(array(0, $_REQUEST['item_id']));
-    $_SESSION['success_message'] = '商品を非公開に設定しました。';
-    header('Location: sell_list.php');
-    exit();
-  }else{
-    $statement = dbc()->prepare('UPDATE items SET status=? WHERE id=?');
-    $statement->execute(array(1, $_REQUEST['item_id']));
-    $_SESSION['success_message'] = '商品を公開に設定しました。';
-    header('Location: sell_list.php');
-    exit();
-  }
+if (!empty($_POST)) {
+  ItemLogic::EditItems($_POST);
 }
 
 if(isset($_SESSION['message'])){
